@@ -9,7 +9,7 @@ const port = 3001;
 app.use(cors());
 
 app.get("/budget", (req, res) => {
-	fs.readFile("./budget_data.json", function(err, data) {
+	fs.readFile("./budget_data.json", function (err, data) {
 		res.json(JSON.parse(data));
 	});
 });
