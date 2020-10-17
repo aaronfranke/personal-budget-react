@@ -1,4 +1,44 @@
 import React from "react";
+import Chart from "chart.js";
+import axios from "axios";
+
+function createChart(dataSource) {
+	var context = document.getElementById("myChart").getContext("2d");
+	// tslint:disable: no-unused-expression
+	new Chart(context, {
+		type: "pie",
+		data: dataSource
+	});
+}
+
+function getBudget() {
+	axios.get("http://localhost:3001/budget")
+		.then(function (res) {
+			// Empty template data structure.
+			var dataSource = {
+				datasets: [{
+					data: [],
+					backgroundColor: [
+						"#324cdd",
+						"#ff6384",
+						"#36a2eb",
+						"#ff0500",
+						"#ffcd56",
+						"#fd6b19",
+						"#83c57a",
+						"#96113a",
+					]
+				}],
+				labels: []
+			};
+			// Populate the data structure with received values.
+			for (var i = 0; i < res.data.myBudget.length; i++) {
+				dataSource.datasets[0].data[i] = res.data.myBudget[i].budget;
+				dataSource.labels[i] = res.data.myBudget[i].title;
+			}
+			createChart(dataSource);
+		});
+}
 
 function HomePage() {
 	return (
@@ -73,5 +113,7 @@ function HomePage() {
 		</main>
 	);
 }
+
+getBudget();
 
 export default HomePage;
